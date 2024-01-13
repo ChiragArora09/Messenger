@@ -45,7 +45,14 @@ const AuthForm = () => {
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white bg-opacity-20 backdrop-blur-lg rounded drop-shadow-lg px-4 py-8 shadow sm:ronded-lg sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-                <Input label="Email" />
+                {variant === 'REGISTER' && (
+                    <Input id="name" label="Name" register={register} errors={errors} />
+                )}
+                <Input id="email" label="Email" type="email" register={register} errors={errors} />
+                <Input id="password" label="Password" type="password" register={register} errors={errors} />
+                <div>
+                    <Button>Test</Button>
+                </div>
             </form>
         </div>
     </div>
