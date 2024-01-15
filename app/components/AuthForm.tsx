@@ -32,7 +32,7 @@ const AuthForm = () => {
     const onSubmit: SubmitHandler<FieldValues> = (data) => {
         setIsLoading(true)
         if(variant==='REGISTER'){
-            // Axios register
+            
         }
         if(variant==='LOGIN'){
             // NextAuth signin
