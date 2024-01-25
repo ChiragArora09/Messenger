@@ -18,7 +18,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ label, href, icon:Icon, activ
 
   return (
     <li onClick={handleClick}>
-        <Link href={href} className={clsx(`group flex gap-x-3 mb-4 rounded-md p-2 text-sm leading-6 font-semibold text-gray-200 hover:border-2 hover:border-gray-900`, active && 'bg-gray-100 text-black')}>
+        <Link href={href} className={clsx(`group flex gap-x-3 mb-4 rounded-md p-2 text-sm leading-6 font-semibold text-gray-200 hover:border-2 hover:border-gray-900`, active && 'bg-[#363636] border')}>
             <Icon className="h-6 w-6 shrink-0" aria-hidden="true" />
             <span className="sr-only">{label}</span>
         </Link>
