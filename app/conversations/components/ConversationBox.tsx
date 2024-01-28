@@ -55,7 +55,7 @@ const ConversationBox:React.FC<ConversationBoxProps> = ({data, selected}) => {
     }, [lastMessage])
 
   return (
-    <div onClick={handleClick} className={clsx(`w-full relative flex items-center space-x-3 hover:bg-[#444444] rounded-lg transition cursor-pointer px-4 py-1`, selected?'bg-neutral-100':'bg-[#1e1e1e]')}>
+    <div onClick={handleClick} className={clsx(`w-full relative flex items-center mb-3 space-x-3 hover:bg-[#444444] rounded-lg transition cursor-pointer px-4 py-1`, selected?'bg-neutral-600':'bg-[#1e1e1e]')}>
         <Avatar user={otherUser} />
         <div className="min-w-0 flex-1">
             <div className="focus:outline-none">
