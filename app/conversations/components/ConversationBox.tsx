@@ -3,11 +3,12 @@
 import { useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { Conversation, Message, User } from "@prisma/client"
-// import { format } from 'date-fns'
+import { format } from 'date-fns'
 import { useSession } from "next-auth/react"
 import clsx from "clsx"
 import { WholeConversationType } from "@/app/types"
 import useOtherUser from "@/app/hooks/useOtherUser"
+import Avatar from "@/components/Avatar"
 
 interface ConversationBoxProps {
     data: WholeConversationType,
@@ -40,10 +41,34 @@ const ConversationBox:React.FC<ConversationBoxProps> = ({data, selected}) => {
         if(!userEmail){
             return false
         }
-    }, [])
+        return seenArray.filter((user) => user.email === userEmail).length!==0
+    }, [userEmail, lastMessage])
+
+    const lastMessageText = useMemo(() => {
+        if(lastMessage?.image){
+            return "Sent an image"
+        }
+        if(lastMessage?.body){
+            return lastMessage.body
+        }
+        return "Started a conversation"
+    }, [lastMessage])
 
   return (
-    <div>ConversationBox</div>
+    <div onClick={handleClick} className={clsx(`w-full relative flex items-center space-x-3 hover:bg-[#444444] rounded-lg transition cursor-pointer px-4 py-1`, selected?'bg-neutral-100':'bg-[#1e1e1e]')}>
+        <Avatar user={otherUser} />
+        <div className="min-w-0 flex-1">
+            <div className="focus:outline-none">
+                <div className="flex justify-between items-center mb-1 text-neutral-200">
+                    <p className="text-md font-medium ">{data.name || otherUser.name}</p>
+                    {lastMessage?.createdAt && (
+                        <p className="text-xs text-gray-300 font-light">{format(new Date(lastMessage.createdAt), 'p')}</p>
+                    )}
+                </div>
+                <p className={clsx(`truncate text-xs`, hasSeen?'text-gray-400':'text-neutral-300 font-medium')}>{lastMessageText}</p>
+            </div>
+        </div>
+    </div>
   )
 }
 
