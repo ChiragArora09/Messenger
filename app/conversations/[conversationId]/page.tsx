@@ -3,6 +3,7 @@ import getMessages from "@/app/actions/getMessages"
 import EmptyState from "@/components/EmptyState"
 import Header from "./components/Header"
 import Body from "./components/Body"
+import TextForm from "./components/TextForm"
 
 interface IParams {
     conversationId: string
@@ -27,6 +28,7 @@ const conversationId = async ({params}:{params:IParams}) => {
             <div className="h-full flex flex-col">
                 <Header conversation={conversation} />
                 <Body />
+                <TextForm />
             </div>
         </div>
     )
