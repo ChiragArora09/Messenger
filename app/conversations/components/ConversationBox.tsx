@@ -9,6 +9,7 @@ import clsx from "clsx"
 import { WholeConversationType } from "@/app/types"
 import useOtherUser from "@/app/hooks/useOtherUser"
 import Avatar from "@/components/Avatar"
+import AvatarGroup from "@/components/AvatarGroup"
 
 interface ConversationBoxProps {
     data: WholeConversationType,
@@ -56,7 +57,11 @@ const ConversationBox:React.FC<ConversationBoxProps> = ({data, selected}) => {
 
   return (
     <div onClick={handleClick} className={clsx(`w-full relative flex items-center mb-3 space-x-3 hover:bg-[#444444] rounded-lg transition cursor-pointer px-4 py-1`, selected?'bg-neutral-600':'bg-[#1e1e1e]')}>
-        <Avatar user={otherUser} />
+        {data.isGroup ? (
+            <AvatarGroup users={data.users} />
+        ):(
+            <Avatar user={otherUser} />
+        )}
         <div className="min-w-0 flex-1">
             <div className="focus:outline-none">
                 <div className="flex justify-between items-center mb-1 text-neutral-200">
@@ -65,7 +70,7 @@ const ConversationBox:React.FC<ConversationBoxProps> = ({data, selected}) => {
                         <p className="text-xs text-gray-300 font-light">{format(new Date(lastMessage.createdAt), 'p')}</p>
                     )}
                 </div>
-                <p className={clsx(`truncate text-xs`, hasSeen?'text-gray-400':'text-neutral-300 font-medium')}>{lastMessageText}</p>
+                <p className={clsx(`truncate text-xs`, hasSeen?'text-gray-400':'text-neutral-300 font-bold')}>{lastMessageText}</p>
             </div>
         </div>
     </div>

@@ -8,6 +8,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { MdClose, MdDelete } from "react-icons/md"
 import Avatar from "@/components/Avatar"
 import ConfirmModel from "./ConfirmModel"
+import AvatarGroup from "@/components/AvatarGroup"
 
 interface ProfileDrawerProps {
     isOpen: boolean
@@ -65,12 +66,24 @@ const ProfileDrawer:React.FC<ProfileDrawerProps> = ({isOpen, onClose, data}) => 
                                         <div className="relative mt-6 flex-1 px-4 sm:px-6">
                                             <div className="flex flex-col items-center">
                                                 <div className="mb-2">
-                                                    <Avatar user={otherUser} />
+                                                    {data.isGroup ? (
+                                                        <AvatarGroup users={data.users} />
+                                                    ):(
+                                                        <Avatar user={otherUser} />
+                                                    )}
                                                 </div>
                                                 <div>{title}</div>
                                                 <div className="text-sm text-green-400">{statusText}</div>
                                                 <div className="w-full mt-8 pb-5 pt-5 sm:px-0 sm:pt-0">
                                                     <dl className="border-y border-gray-700 space-y-8 py-8 px-4 sm:space-y-6 sm:px-6">
+                                                        {data.isGroup && (
+                                                            <div>
+                                                                <dt className="text-xl font-medium text-gray-200 sm:w-40 sm:flex-shrink-0">Emails</dt>
+                                                                <dd className="mt-1 text-sm text-gray-400 sm:col-span-2">
+                                                                    {data.users.map((user) => `${user.name} (${user.email})`).join(' | ')}
+                                                                </dd>
+                                                            </div>
+                                                        )}
                                                         {!data.isGroup && (
                                                             <div className="px-8">
                                                                 <dt className="text-sm font-medium text-gray-200 sm:w-40 sm:flex-shrink-0">Email</dt>
