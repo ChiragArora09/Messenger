@@ -9,6 +9,8 @@ import { MdClose, MdDelete } from "react-icons/md"
 import Avatar from "@/components/Avatar"
 import ConfirmModel from "./ConfirmModel"
 import AvatarGroup from "@/components/AvatarGroup"
+import useActiveList from "@/app/hooks/useActiveList"
+import clsx from "clsx"
 
 interface ProfileDrawerProps {
     isOpen: boolean
@@ -22,6 +24,9 @@ const ProfileDrawer:React.FC<ProfileDrawerProps> = ({isOpen, onClose, data}) => 
     const otherUser = useOtherUser(data)
 
     const [confirmOpen, setConfirmOpen] = useState(false)
+
+    const { members } = useActiveList()
+    const isActive = members.indexOf(otherUser?.email!)!==-1
     
     const joinedDate = useMemo(() => {
         return format(new Date(otherUser.createdAt), 'PP')
@@ -36,8 +41,8 @@ const ProfileDrawer:React.FC<ProfileDrawerProps> = ({isOpen, onClose, data}) => 
             return `${data.users.length} members`
         }
 
-        return 'Active'
-    }, [data])
+        return isActive ? 'Online' : 'Offline'
+    }, [data, isActive])
 
   return (
     <>
@@ -73,7 +78,8 @@ const ProfileDrawer:React.FC<ProfileDrawerProps> = ({isOpen, onClose, data}) => 
                                                     )}
                                                 </div>
                                                 <div>{title}</div>
-                                                <div className="text-sm text-green-400">{statusText}</div>
+                                                {/* <div className="text-sm text-green-400">{statusText}</div> */}
+                                                <div className={clsx(`text-sm`, isActive?'text-green-500':'text-red-500')}>{statusText}</div>
                                                 <div className="w-full mt-8 pb-5 pt-5 sm:px-0 sm:pt-0">
                                                     <dl className="border-y border-gray-700 space-y-8 py-8 px-4 sm:space-y-6 sm:px-6">
                                                         {data.isGroup && (
