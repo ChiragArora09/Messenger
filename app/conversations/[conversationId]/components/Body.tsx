@@ -5,6 +5,8 @@ import { WholeMessageType } from "@/app/types"
 import { useEffect, useRef, useState } from "react"
 import MessageBox from "./MessageBox"
 import axios from "axios"
+import { pusherClient } from "@/app/libs/pusher"
+import { find } from "lodash"
 
 interface BodyProps {
   initialMessages: WholeMessageType[]
@@ -21,6 +23,39 @@ const Body:React.FC<BodyProps> = ({initialMessages}) => {
     axios.post(`/api/conversation/${conversationId}/seen`)
   }, [conversationId])
   
+  useEffect(() => {
+    pusherClient.subscribe(conversationId)
+    latestRef?.current?.scrollIntoView()
+
+    const messageHandler = (message:WholeMessageType) => {
+      axios.post(`/api/conversation/${conversationId}/seen`)
+      setMessages((current) => {
+        if(find(current, {id: message.id})){
+          return current
+        }
+        return [...current, message]
+      })
+      latestRef?.current?.scrollIntoView()
+    }
+
+    const updateMessageHandler = (newMessage:WholeMessageType) => {
+      setMessages((current) => current.map((currentMessage) => {
+        if(currentMessage.id === newMessage.id){
+          return newMessage
+        }
+        return currentMessage
+      }))
+    }
+
+    pusherClient.bind('messages:new', messageHandler)
+    pusherClient.bind('message:update', updateMessageHandler)
+
+    return () => {
+      pusherClient.unsubscribe(conversationId)
+      pusherClient.unbind('messages:new', messageHandler)
+      pusherClient.unbind('messages:update', updateMessageHandler)
+    }
+  }, [conversationId])
 
   return (
     <div className="flex-1 overflow-y-auto">
